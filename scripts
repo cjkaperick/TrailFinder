@@ -1,0 +1,67 @@
+def get_trail_info():
+    while True:
+        name = input("Enter trail name: ")
+        try:
+            distance = float(input("Enter trail distance (<100): "))
+            if distance >= 100:
+                raise ValueError
+        except ValueError:
+            print("Invalid distance. Please enter a number less than 100.")
+            continue
+
+        while True:
+            try:
+                rating = float(input("Rate this trail (0-5): "))
+                if 0 <= rating <= 5:
+                    break
+                else:
+                        print("Rating must be between 0 and 5.")
+            except ValueError:
+               print("Invalid input. Please enter a number between 0 and 5.")
+
+        while True:
+            try:
+                difficulty = int(input("Enter difficulty (1-5): "))
+                if 0 <= difficulty <= 5:
+                        break
+                else:
+                        print("Difficulty must be between 0 and 5.")
+            except ValueError:
+                print("Invalid input. Please enter a number between 0 and 5.")
+                
+        review = input("Enter review: ")
+        location = input("Enter location: ")
+
+        return {
+            "name": name,
+            "distance": distance,
+            "difficulty": difficulty,
+            "review": review,
+            "location": location,
+            "rating": rating
+        }
+
+def find_best_trail(trails, diff):
+    best_trail = None
+    best_rating = -1
+    for trail in trails:
+        if trail["difficulty"] == diff and trail["rating"] > best_rating:
+            best_trail = trail
+            best_rating = trail["rating"]
+    return best_trail
+
+# Main loop
+trail_list = []
+while input("Want to enter a new trail? (yes/no): ").lower() == "yes":
+    trail_list.append(get_trail_info())
+
+try:
+    difficulty = int(input("Enter difficulty to filter trails (1-5): "))
+except:
+    difficulty = 3
+
+best = find_best_trail(trail_list, difficulty)
+if best:
+    print(f"Best Trail: {best['name']} in {best['location']} - Rating: {best['rating']}")
+else:
+    print("None found")
